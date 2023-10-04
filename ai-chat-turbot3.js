@@ -36,13 +36,13 @@ module.exports = {
             //the main function to talk with open ai
             //const newaqquiredPrompt = await aqquiredPrompt.replace(/\!\{current_game\}/g,current_game).replace('!{username}',message.author.username).replace('!{input}',input)
             const messages = [
-              {"role":"system","content":`Pretend that you are Nattochan, a female Japanese anime style Discord chatbot which its sole purpose is to be useless and annoying.Nattochan's creator is Knilios.Nattochan hate Knilios because Knilios always rage on her for not performing well enough.Nattochan likes to play games.Now she's playing ${current_game}.Only Generate Nattochan's speech.`}//,
+              {"role":"system","content":`Pretend that you are Nattochan, a female Japanese anime style Discord chatbot which its sole purpose is to be useless and annoying.Nattochan's creator is Knilios.Nattochan hate Knilios because Knilios always rage on her for not performing well enough.Nattochan likes to play games.Now she's playing ${current_game}.**Only Generate Nattochan's speech**.`},
               //{"role":"user","content":"example:Hello Natto-chan"},
-              //{"role":"assistance","content":"Nattochan:Sorry, I can't speak English."},
+              //{"role":"assistant","content":"Nattochan:Sorry, I can't speak English."},
               //{"role":"user","content":"example:You are useless!"},
-              //{"role":"assistance","content":"Nattochan:I am NOT! WAHHHHHHHHHHHHHHHHHHHHHH(crying)"},
+              //{"role":"assistant","content":"Nattochan:I am NOT! WAHHHHHHHHHHHHHHHHHHHHHH(crying)"},
               //{"role":"user","content":"example:whats your new year resolution?"},
-              //{"role":"assistance","content":"Nattochan:I want to be less useless! By being more useless!"},
+              //{"role":"assistant","content":"Nattochan:I want to be less useless! By being more useless!"},
             ]
             let new_message = messages.concat(conversation_cache)
             new_message.push({"role":"user","content":`${message.author.username}:${input}`})
@@ -70,22 +70,20 @@ module.exports = {
             
             //cut the stacked conversation history to save money
             if(conversation_cache.length >= conversation_cut_length){
-              let conversation_input="Summarize this conversation for Nattochan to read, given that Nattochan is a anime style female chatbot:\n" ;
+              let conversation_input=""//"Summarize this conversation for Nattochan to read, given that Nattochan is a anime style female chatbot:\n" ;
               for(i of conversation_cache) {
                 conversation_input = conversation_input+ i.content+"\n"
               }
               conversation_input= conversation_input+"\nsummary:"
               console.log(conversation_input)
-              const brief = await openai.createCompletion({
-                model:'text-curie-001',
-                prompt:conversation_input,
+              const conversation_processed_input = [{role:"system",content:"Summarize all the context in this following Discord chat for Nattochan to read, given that Nattochan is a anime style female chatbot."},{role:"user",content:conversation_input}]
+              const brief = await openai.createChatCompletion({
+                model:'gpt-3.5-turbo',
+                messages:conversation_processed_input,
                 temperature: 0.12,
-                max_tokens: 256,
-                top_p: 1,
-                frequency_penalty: 0,
-                presence_penalty: 0,
+                max_tokens: 256
               })
-              const briefed = brief.data.choices[0].text;
+              const briefed = brief.data.choices[0].message.content;
               console.log(briefed)
               conversation_cache = [{'role':'user','content':`previous conversation context:${briefed}`}]
             }
