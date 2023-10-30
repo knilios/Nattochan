@@ -50,7 +50,7 @@ module.exports = {
             const response = await openai.createChatCompletion({
               model: "gpt-3.5-turbo",
               messages:new_message,
-              max_tokens: 256
+              max_tokens: 1000
             });
             console.log("user : ",message.author.username)
             //console.log(response.data)
@@ -81,7 +81,7 @@ module.exports = {
                 model:'gpt-3.5-turbo',
                 messages:conversation_processed_input,
                 temperature: 0.12,
-                max_tokens: 256
+                max_tokens: 1000
               })
               const briefed = brief.data.choices[0].message.content;
               console.log(briefed)
