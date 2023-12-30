@@ -13,7 +13,8 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   const dathing = ["Minecraft","Fortnite","Mindustry","Grand Theft Auto V","Paladins","Pokemon","Deceit","Team Fortress 2","ROBLOX","VALORANT","League of Legends","Amogus"]
   const qwer = Math.floor(Math.random()*dathing.length)  
-  client.user.setActivity(dathing[qwer])
+  //client.user.setActivity(dathing[qwer])
+  client.user.setActivity("Fortune telling")
   dathingGlobal = dathing[qwer]
 });
 client.on("messageCreate", (message) => {
