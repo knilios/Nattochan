@@ -48,7 +48,7 @@ module.exports = {
             new_message.push({"role":"user","content":`${message.author.username}:${input}`})
             console.log(new_message)
             const response = await openai.createChatCompletion({
-              model: "gpt-3.5-turbo",
+              model: "gpt-4-turbo",
               messages:new_message,
               max_tokens: 1000
             });
